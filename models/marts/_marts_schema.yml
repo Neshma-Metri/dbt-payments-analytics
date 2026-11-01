@@ -1,0 +1,44 @@
+models:
+- name : fct_orders
+  description: "One row per order with payment amounts and delivery metrics"
+  columns:
+    - name: order_id
+      description: "Primary Key"
+      data_tests:
+        - unique
+        - not_null 
+    - name: order_status
+      data_tests:
+        - not_null
+    - name: total_payment_amount
+      data_tests: 
+        - not_null
+    - name: credit_card_amt
+      data_tests: 
+        - not_null
+    - name: boleto_amt
+      data_tests: 
+        - not_null
+    - name: voucher_amt
+      data_tests: 
+        - not_null
+    - name: debit_card_amt
+      data_tests: 
+        - not_null
+    - name: purchase_date
+      data_tests:
+        - not_null 
+
+- name : dim_customers
+  description: "One row per customer with lifetime value and order history"
+  columns:   
+    - name: cust_order_id
+      data_tests:
+        - unique 
+        - not_null 
+    - name: lifetime_value
+      data_tests:
+        - not_null
+    - name: total_orders
+      data_tests:
+        - not_null
