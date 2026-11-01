@@ -31,5 +31,5 @@
   )
   select * from final
   {% if is_incremental() %}
-    where ordered_at > (select max(ordered_at) from {{ this }})
+    where purchase_date > (select max(purchase_date) from {{ this }})
   {% endif %}
