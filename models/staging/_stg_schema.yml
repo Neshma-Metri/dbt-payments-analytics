@@ -1,0 +1,71 @@
+models:
+- name : stg_orders
+  description: "Data validation for orders from raw Olist DB data"
+  columns:
+    - name: order_id
+      description: "Primary Key"
+      data_tests:
+        - unique
+        - not_null 
+    - name: order_status
+      data_tests: 
+        - not_null
+        - accepted_values:
+            arguments:
+              values: ['delivered', 'shipped', 'canceled', 'unavailable', 'invoiced', 'processing', 'created', 'approved']
+    - name: customer_id
+      data_tests: 
+        - not_null
+        - relationships:
+            arguments:
+              to: ref('stg_customers')
+              field: cust_order_id
+    - name: purchase_date
+      data_tests: 
+        - not_null
+
+- name : stg_payments
+  description: "Data validation for order_payments from raw Olist DB data"
+  data_tests:
+        - dbt_utils.unique_combination_of_columns:
+            arguments:
+              combination_of_columns:
+                - order_id
+                - payment_sequential
+  columns:   
+    - name: order_id
+      data_tests:
+        - not_null 
+        - relationships:
+            arguments:
+                to: ref('stg_orders')
+                field: order_id
+    - name: payment_type
+      data_tests: 
+        - not_null
+        - accepted_values:
+            arguments:
+              values: ['credit_card', 'debit_card', 'voucher', 'boleto', 'not_defined']
+    - name: payment_value
+      data_tests: 
+        - not_null
+- name : stg_customers
+  description: "Data validation for customers from raw Olist DB data"
+  columns:
+    - name: cust_unique_id
+      description: "Primary Key"
+      data_tests:
+        - unique
+        - not_null 
+    - name: cust_zip_pfx
+      data_tests: 
+       - dbt_utils.expression_is_true:
+          arguments:
+            expression: "length(cast(cust_zip_pfx as string)) = 5"
+    - name: cust_order_id
+      data_tests: 
+        - not_null
+        - relationships:
+            arguments:
+              to: ref('stg_orders')
+              field: customer_id

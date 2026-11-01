@@ -24,6 +24,7 @@
           boleto_amt,
           voucher_amt,
           debit_card_amt,
+          not_defined_amt,
           -- delivery metrics
           timestamp_diff(delivery_date, purchase_date, day) as days_to_deliver,
           timestamp_diff(estimated_delivery_date, delivery_date, day) as days_delivery_delta
