@@ -8,7 +8,7 @@ select
     p.credit_card_amt,
     p.boleto_amt,
     p.voucher_amt,
-    p.debit_card_amt,
-    p.credit_card_amt + p.boleto_amt + p.voucher_amt + p.debit_card_amt as total_payment_amount
+    p.debit_card_amt,p.not_defined_amt,
+    p.credit_card_amt + p.boleto_amt + p.voucher_amt + p.debit_card_amt + p.not_defined_amt as total_payment_amount
 from {{ ref("stg_orders") }} as o
 join {{ ref("int_payment_methods_pivoted") }} as p on o.order_id = p.order_id

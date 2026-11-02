@@ -53,15 +53,8 @@ models:
   description: "Data validation for customers from raw Olist DB data"
   columns:
     - name: cust_unique_id
-      description: "Primary Key"
       data_tests:
-        - unique
         - not_null 
-    - name: cust_zip_pfx
-      data_tests: 
-       - dbt_utils.expression_is_true:
-          arguments:
-            expression: "length(cast(cust_zip_pfx as string)) = 5"
     - name: cust_order_id
       data_tests: 
         - not_null

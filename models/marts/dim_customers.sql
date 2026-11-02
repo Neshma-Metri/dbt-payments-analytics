@@ -21,8 +21,9 @@ final as (
         c.cust_state,
         co.first_order_date,
         co.most_recent_order_date,
-        co.total_orders,
-        co.lifetime_value
+        COALESCE(co.lifetime_value, 0) as lifetime_value,
+        COALESCE(co.total_orders, 0)   as total_orders,
+        {{ classify_customer_tier('co.lifetime_value') }} as customer_tier
     from customers c
     left join customer_orders co  on co.customer_id = c.cust_order_id
 )
